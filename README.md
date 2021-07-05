@@ -27,6 +27,7 @@ npm install
 
 ## Usage
 npm seed
+
 npm start
 
 ## Results
