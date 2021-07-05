@@ -3,7 +3,6 @@ const { Workout } = require("../models");
 
 router.get("/api/workouts", (req, res) => {
     Workout.find({})
-        .sort({ name: 1 })
         .then(dbWorkout => {
             res.json(dbWorkout);
         })
@@ -23,12 +22,14 @@ router.post("/api/workouts", ({ body }, res) => {
         });
 });
 
-router.put("/api/workouts/:id", ({ body }, res) => {
-    Workout.findOneAndUpdate(body)
-        .then(dbWorkout => {
-            res.json(dbWorkout);
-        })
-        .catch(err => {
+router.put("/api/workouts/:id", (req, res) => {
+
+    Workout.findOne({_id: req.params.id}).then((workout) => {
+        workout.exercises.push(req.body);
+        return workout.save();
+    }).then((workout) => {
+        return res.json(workout);
+    }).catch(err => {
             res.status(400).json(err);
         });
 });
